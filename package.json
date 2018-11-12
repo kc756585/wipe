@@ -1,0 +1,12 @@
+{
+  "name": "kc-wipe",
+  "version": "1.0.1",
+  "devDependencies": {
+    "grund": "^1.0.7",
+    "grunt": "^1.0.3",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-jshint": "^2.0.0",
+    "grunt-contrib-uglify": "^4.0.0"
+  }
+}
