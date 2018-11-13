@@ -19,23 +19,48 @@ function drawMask(context){
 	context.fillRect(0,0,_w,_h);
 	context.globalCompositeOperation="destination-out";
 }
-// 在画布上画半径为30的圆
-function drawPoint(context,posX,posY){
-	context.beginPath();
-	context.arc(posX,posY,radius,0,2*Math.PI);
-	context.fillStyle = "red";
-	context.fill();
-}
-// 画线
-function drawLine(context,x1,y1,x2,y2){
-	context.save();
-	context.lineCap = "round";
-	context.beginPath();
-	context.moveTo(x1, y1);
-	context.lineTo(x2,y2);
-	context.lineWidth = radius*2;
-	context.stroke();
-	context.restore();
+
+// // 在画布上画半径为30的圆
+// function drawPoint(context,posX,posY){
+// 	context.beginPath();
+// 	context.arc(posX,posY,radius,0,2*Math.PI);
+// 	context.fillStyle = "red";
+// 	context.fill();
+// }
+// // 画线
+// function drawLine(context,x1,y1,x2,y2){
+// 	context.save();
+// 	context.lineCap = "round";
+// 	context.beginPath();
+// 	context.moveTo(x1, y1);
+// 	context.lineTo(x2,y2);
+// 	context.lineWidth = radius*2;
+// 	context.stroke();
+// 	context.restore();
+// }
+function drawT(context,x1,y1,x2,y2) {
+	if (arguments.length === 3) {
+		//调用的是画点功能
+		context.save();
+		context.beginPath();
+		context.arc(x1,y1,radius,0,2*Math.PI);
+		context.fillStyle = "red";
+		context.fill();
+		context.restore();
+	}else if(arguments.length === 5){
+		//调用的是画线功能
+		context.save();
+		context.lineCap = "round";
+		context.beginPath();
+		context.moveTo(x1, y1);
+		context.lineTo(x2,y2);
+		context.lineWidth = radius*2;
+		context.stroke();
+		context.restore();
+	}else{
+		return false;
+
+	}
 }
 // 在canvas画布上监听自定义事件"mousedown", 调用drawpoint函数
 cas.addEventListener(clickEvtName,function(evt){
@@ -45,7 +70,7 @@ cas.addEventListener(clickEvtName,function(evt){
 	// 获取鼠标在视口的坐标, 传递参数到drawPoint
 	posX = device ? event.touches[0].clientX : event.clientX;
 	posY = device ? event.touches[0].clientY : event.clientY;
-	drawPoint(context,posX,posY);
+	drawT(context,posX,posY);
 },false);
 // 为画布添加手势操作--手指点击响应
 // cas.addEventListener("touchstart",function(evt){
@@ -68,7 +93,7 @@ cas.addEventListener(moveEvtName,function(evt){
 		// 获取鼠标在视口的坐标, 传递参数到drawPoint
 		var x2 = device ? event.touches[0].clientX : event.clientX;
 		var y2 = device ? event.touches[0].clientY : event.clientY;
-		drawLine(context,posX,posY,x2,y2);
+		drawT(context,posX,posY,x2,y2);
 		// 每次的结束点变成下一次画线的开始点
 		posX = x2;
 		posY = y2;
