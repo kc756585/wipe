@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<title>wipe 组件</title>
+	<title>在db01分支上的修改 cv</title>
 	<style type="text/css" media="screen">
 	html,body{
 		width:100%;
@@ -12,14 +12,37 @@
 		padding:0;
 	}
 	#cas{
-		border:1px solid #000;
+		/*border:1px solid #000;*/
 		background:url(image/wipe1.jpg) center 0 no-repeat;
 		background-size: cover;
 	}
 	</style>
 </head>
 <body>
+<div class="parent">
 	<canvas id="cas" width="375" height="667"></canvas>
+</div>
 </body>
 </html>
 <script type="text/javascript" src="js/wipe.js"></script>
+<script type="text/javascript">
+var wipeConfjg = {
+	id:"cas",
+	coverType:"image",   //取值类型color,image
+	color:"",
+	imgUrl:"image/wipe2.jpg",   //前面的覆盖图
+	backImgUrl:"image/wipe1.jpg",            //背景图片
+	width:"375",                   //canvas宽
+	height:"667",                 //canvas高
+	radius:"20",            //涂抹笔的半径
+            transpercent:50,    //透明面积占整个画布的百分比，超出此数字显示全部画布
+	callback:wipedCallback             //用户自定义回调函数名称
+}
+var cas01 = new Wipe(wipeConfjg);
+function wipedCallback(percent){
+	if ( percent > 50 ) {
+		console.log("透明面积超过涂抹完成,查看底图");
+	};
+	
+}
+</script>
