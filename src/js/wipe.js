@@ -99,13 +99,13 @@ Wipe.prototype.addEvent = function(){
 		that.isMouseDown = true;
 		var event = evt || window.event;
 		// 获取鼠标在视口的坐标, 传递参数到drawPoint
-		that.posX = that.device ? event.touches[0].clientX : event.clientX;
-		that.posY = that.device ? event.touches[0].clientY : event.clientY;
+		 scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+		 scrollLeft=document.documentElement.scrollLeft||document.body.scrollLeft;
+		that.posX = that.device ? event.touches[0].clientX+scrollLeft : event.clientX+scrollLeft;
+		that.posY = that.device ? event.touches[0].clientY+scrollTop : event.clientY+scrollTop;
 		that.drawT(that.posX,that.posY);
 	},false);
-
-	// 增加监听"mousemove", 调用drawpoint函数
-	this.cas.addEventListener(moveEvtName,function(evt){
+            this.cas.addEventListener(moveEvtName,function(evt){
 		// 判断, 当isMouseDown为true时, 才执行下面的操作
 		if ( !that.isMouseDown) {
 			return false;
@@ -113,14 +113,16 @@ Wipe.prototype.addEvent = function(){
 			var event = evt || window.event;
 			event.preventDefault();
 			// 获取鼠标在视口的坐标, 传递参数到drawPoint
-			var x2 = that.device ? event.touches[0].clientX : event.clientX;
-			var y2 = that.device ? event.touches[0].clientY : event.clientY;
+			
+			var x2 = that.device ? event.touches[0].clientX+scrollLeft : event.clientX+scrollLeft;
+			var y2 = that.device ? event.touches[0].clientY+scrollTop : event.clientY+scrollTop;
 			that.drawT(that.posX,that.posY,x2,y2);
 			// 每次的结束点变成下一次画线的开始点
 			that.posX = x2;
 			that.posY = y2;
 		}
 	},false);
+
 
 	this.cas.addEventListener(endEvtName,function(){
 		//还原isMouseDown 为false
