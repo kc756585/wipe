@@ -94,6 +94,15 @@ Wipe.prototype.addEvent = function(){
 	var clickEvtName = this.device ? "touchstart" : "mousedown";
 	var moveEvtName = this.device ? "touchmove" : "mousemove";
 	var endEvtName = this.device ? "touchend" : "mouseup";
+	var allTop = this.cas.offsetTop;
+	var allLeft = this.cas.offsetLeft;
+	var scrollTop;
+	var scrollLeft;
+	var tobj = this.cas;
+	while(tobj = tobj.offsetParent){
+		allTop += tobj.offsetTop;
+		allLeft += tobj.offsetLeft;
+	}
 	// 在canvas画布上监听自定义事件"mousedown", 调用drawpoint函数
 	this.cas.addEventListener(clickEvtName,function(evt){
 		that.isMouseDown = true;
@@ -101,8 +110,8 @@ Wipe.prototype.addEvent = function(){
 		// 获取鼠标在视口的坐标, 传递参数到drawPoint
 		 scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
 		 scrollLeft=document.documentElement.scrollLeft||document.body.scrollLeft;
-		that.posX = that.device ? event.touches[0].clientX+scrollLeft : event.clientX+scrollLeft;
-		that.posY = that.device ? event.touches[0].clientY+scrollTop : event.clientY+scrollTop;
+		that.posX = that.device ? event.touches[0].clientX - allLeft + scrollLeft : event.clientX- allLeft + scrollLeft;
+		that.posY = that.device ? event.touches[0].clientY - allTop +scrollTop : event.clientY - allTop + scrollTop;
 		that.drawT(that.posX,that.posY);
 	},false);
             this.cas.addEventListener(moveEvtName,function(evt){
@@ -114,8 +123,8 @@ Wipe.prototype.addEvent = function(){
 			event.preventDefault();
 			// 获取鼠标在视口的坐标, 传递参数到drawPoint
 			
-			var x2 = that.device ? event.touches[0].clientX+scrollLeft : event.clientX+scrollLeft;
-			var y2 = that.device ? event.touches[0].clientY+scrollTop : event.clientY+scrollTop;
+			var x2 = that.device ? event.touches[0].clientX - allLeft +scrollLeft : event.clientX - allLeft +scrollLeft;
+			var y2 = that.device ? event.touches[0].clientY - allTop +scrollTop : event.clientY - allTop +scrollTop;
 			that.drawT(that.posX,that.posY,x2,y2);
 			// 每次的结束点变成下一次画线的开始点
 			that.posX = x2;
