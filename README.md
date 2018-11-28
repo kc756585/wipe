@@ -6,7 +6,7 @@ PC端实现涂抹擦除效果, 超过50%的涂抹面积可以查看全部. 涂�
 ## ver 2.0.0 ##
 实现了面向对象方式,
 增加了参数配置
-## 3.0.0 ##
+## ver 3.0.0 ##
 1. 浏览器在滚动距离下bug修复
 2. canvas画布在有偏移和绝对定位下bug修复
 3. 增加了回调函数. 让用户可以自己完成后继功能
@@ -50,4 +50,25 @@ function wipedCallback(percent){
 	if ( percent > 50 ) {
 		console.log("透明面积超过涂抹完成,查看底图");
 	};
-} ```
+} ``` ## ver 4.0.0 ## 1.编写延迟加载。用户在涂抹时延迟3秒计算涂抹面积。 例如： ``` 
+//延迟3秒计算涂抹面积
+Wipe.prototype.getTime=function(){
+	var that = this;
+	setTimeout(function(){
+		that.vclick = true;
+	},3000);
+}
+//每隔3秒进行一次判断
+if (that.vclick) {
+	var percents = that.getTransparencyPercent();
+	//调用同名的全局函数
+	console.log(percents);
+	that.callback.call(null,percents);
+	that.vclick = false;
+	that.getTime()
+	//当透明面积超过用户指定的透明面积
+	if( percents > that.transpercent){
+			that.clearRect();
+			that.isMouseDown = false;
+	}		
+} ``` 

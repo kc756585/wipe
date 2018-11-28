@@ -17,6 +17,7 @@ function Wipe(obj){
 	this.radius = obj.radius;  // 涂抹的半径
 	this.posX = 0;
 	this.posY = 0;
+	this.vclick=true;
 	this.isMouseDown = false;  //鼠标的状态
 	this.callback = obj.callback;
 	this.transpercent = obj.transpercent;
@@ -70,6 +71,13 @@ Wipe.prototype.drawT = function(x1,y1,x2,y2){
 Wipe.prototype.clearRect = function(){
 	this.context.clearRect(0,0,this._w,this._h);
 }
+//延迟3秒计算涂抹面积
+Wipe.prototype.getTime=function(){
+	var that = this;
+	setTimeout(function(){
+		that.vclick = true;
+	},3000);
+}
 //获取透明点占整个画布的百分比
 Wipe.prototype.getTransparencyPercent = function(){
 	var t = 0;
@@ -116,9 +124,7 @@ Wipe.prototype.addEvent = function(){
 	},false);
             this.cas.addEventListener(moveEvtName,function(evt){
 		// 判断, 当isMouseDown为true时, 才执行下面的操作
-		if ( !that.isMouseDown) {
-			return false;
-		}else{
+		if ( that.isMouseDown) {
 			var event = evt || window.event;
 			event.preventDefault();
 			// 获取鼠标在视口的坐标, 传递参数到drawPoint
@@ -129,6 +135,23 @@ Wipe.prototype.addEvent = function(){
 			// 每次的结束点变成下一次画线的开始点
 			that.posX = x2;
 			that.posY = y2;
+			//每隔3秒进行一次判断
+			if (that.vclick) {
+				var percents = that.getTransparencyPercent();
+				//调用同名的全局函数
+				console.log(percents);
+				that.callback.call(null,percents);
+				that.vclick = false;
+				that.getTime()
+				//当透明面积超过用户指定的透明面积
+				if( percents > that.transpercent){
+					that.clearRect();
+					that.isMouseDown = false;
+				}		
+			}
+		   
+		}else{
+			return false;
 		}
 	},false);
 
